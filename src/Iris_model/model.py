@@ -8,6 +8,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import MinMaxScaler
 ##from sklearn.metrics import accuracy_score
 
 
@@ -20,10 +21,18 @@ def train_model():
 
 
     # Split-out validation dataset
-    array = dataset.values
+    array = dataset_norm.values
     X = array[:,0:4]
     y = array[:,4]
-    X_train, X_validation, Y_train, Y_validation = train_test_split(X, y, test_size=0.20, random_state=1)
+
+    # call MinMaxScaler object
+    min_max_scaler = MinMaxScaler()
+    # feed in a numpy array
+    X_norm = min_max_scaler.fit_transform(X.values)
+
+
+    X_train, X_validation, Y_train, Y_validation = train_test_split(X_norm, y, test_size=0.20, random_state=1)
+
 
 
     model = SVC(gamma='auto')
